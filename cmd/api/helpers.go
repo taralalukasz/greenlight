@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
+	"encoding/json"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -17,4 +18,23 @@ func (app *application) readIDParam(w http.ResponseWriter, r *http.Request) (int
 	}
 
 	return id, nil
+}
+
+func (app *application) writeJSON(w http.ResponseWriter, status int, data interface{}, headers http.Header) error {
+	js, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	js = append(js, '\n')
+	//w.Header is a map under the hood, so you don't need helper methods
+	for key, val := range headers {
+		w.Header()[key] = val
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	w.Write(js)
+	
+	return nil
 }
