@@ -11,7 +11,7 @@ type Movie struct {
 	CreatedAt time.Time `json:"-"`   // ignore on serialization
 	Title     string    `json:"title"`
 	Year      int32     `json:"year,omitempty"`  //omitempty means it will be ignored is nil / "" / {}
-	Runtime   int32     `json:"runtime,omitempty,string"` //we can force to represent int as string
+	Runtime   Runtime     `json:"runtime,omitempty"` 
 	Genres    []string  `json:"genres,omitempty"`
 	Version   int32     `json:"version"`
 }
