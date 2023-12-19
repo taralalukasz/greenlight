@@ -92,7 +92,7 @@ func (app *application) readJSON(w http.ResponseWriter, r *http.Request, dst int
 	}
 
 	//we do it second time, to prevent body looking like : "{json: val}{json2: val2}
-	dec.Decode(&struct{}{})
+	err = dec.Decode(&struct{}{})
 	if err != io.EOF {
 		return errors.New("body must only contain a single JSON value")
 	}
