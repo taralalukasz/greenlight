@@ -24,7 +24,7 @@ func (app *application) createMovieHandler(w http.ResponseWriter, r *http.Reques
 	// decoder check struct tag names above. If they don't match - it tries to match key names case-insensitive
 	// json values, which can't be mapped, will be silently ignored 
 	// important - it MUST BE non-nil pointer
-	err := json.NewDecoder(r.Body).Decode(&input)
+	err := app.readJSON(w, r, &input)
 	if err != nil {
 		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
 		return
@@ -54,7 +54,7 @@ func (app *application) createMovieHandlerWithUnmarshall(w http.ResponseWriter, 
 	//same here - target must be a struct pointer. What actually makes sense, as this method doesn't return anything  
 	err = json.Unmarshal(body, &input)
 	if err != nil {
-		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+		app.badRequestResponse(w, r, err)
 		return
 	}
 
